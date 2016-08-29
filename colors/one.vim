@@ -258,9 +258,10 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
     let s:syntax_accent = '528bff'
 
-    let s:vertsplit    = '181a1f'
+    let s:vertsplit    = '22262d'
     let s:special_grey = '3b4048'
-    let s:visual_grey  = '3e4452'
+    " jordwalke: A bit less contrast.
+    let s:visual_grey  = '3b414f'
   else
     let s:mono_1 = '494b53'
     let s:mono_2 = '696c77'
@@ -315,20 +316,24 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('Italic',       '',              '',               'italic')
   call <sid>X('ModeMsg',      s:syntax_fg,     '',               '')
   call <sid>X('MoreMsg',      s:syntax_fg,     '',               '')
-  call <sid>X('NonText',      s:mono_3,        '',               '')
+  " jordwalke: Hide NonText clutter.
+  call <sid>X('NonText',      s:syntax_bg,     s:syntax_bg,      '')
   call <sid>X('PMenu',        '',              s:visual_grey,    '')
-  call <sid>X('PMenuSel',     '',              s:syntax_bg,      '')
-  call <sid>X('PMenuSbar',    '',              s:syntax_bg,      '')
+  " jordwalke: make the popup stand out just a bit.
+  call <sid>X('PMenuSel',     '',              s:syntax_cursor,  '')
+  " jordwalke: Avoid floating scrollbar thumb.
+  call <sid>X('PMenuSbar',    '',              s:visual_grey,      '')
   call <sid>X('PMenuThumb',   '',              s:mono_1,         '')
   call <sid>X('Question',     s:hue_2,         '',               '')
   call <sid>X('Search',       s:syntax_bg,     s:hue_6_2,        '')
   call <sid>X('SpecialKey',   s:special_grey,  '',               '')
   call <sid>X('StatusLine',   s:syntax_fg,     s:syntax_cursor,  'none')
-  call <sid>X('StatusLineNC', s:mono_3,        '',               '')
-  call <sid>X('TabLine',      s:mono_1,        s:syntax_bg,      '')
-  call <sid>X('TabLineFill',  s:mono_3,        s:visual_grey,    'none')
-  call <sid>X('TabLineSel',   s:syntax_bg,     s:hue_2,          '')
-  call <sid>X('Title',        s:hue_4,         '',               'none')
+  " Remove the ugly grey nub.
+  call <sid>X('StatusLineNC', s:syntax_cursor, '',               '')
+  call <sid>X('TabLine',      s:mono_1,        s:syntax_cursor,      'none')
+  call <sid>X('TabLineFill',  s:mono_3,        s:syntax_cursor,  'none')
+  call <sid>X('TabLineSel',   s:hue_2,     s:syntax_bg,          '')
+  call <sid>X('Title',        s:mono_1,         '',               'none')
   call <sid>X('Visual',       '',              s:visual_grey,    '')
   call <sid>X('VisualNOS',    '',              s:visual_grey,    '')
   call <sid>X('WarningMsg',   s:hue_5,         '',               '')
