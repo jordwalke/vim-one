@@ -5,7 +5,7 @@ function! airline#themes#one#refresh()
         \ 'red': airline#themes#get_highlight('Constant'),
         \ }
 
-  let s:N1 = airline#themes#get_highlight2(['Normal', 'bg'], ['DiffAdd', 'fg'], 'none')
+  let s:N1 = airline#themes#get_highlight2(['Normal', 'bg'], ['DiffAdd', 'bg'], 'none')
   let s:N2 = airline#themes#get_highlight('Pmenu')
   let s:N3 = airline#themes#get_highlight('CursorLine')
   let g:airline#themes#one#palette.normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3)
