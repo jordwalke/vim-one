@@ -383,7 +383,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Diff highlighting -------------------------------------------------------{{{
-  call <sid>X('DiffAdd',     s:visual_grey, s:hue_4, '')
+  call <sid>X('DiffAdd',     s:syntax_bg, s:hue_4, '')
   call <sid>X('DiffChange',  '', s:syntax_cursor, '')
   call <sid>X('DiffDelete',  s:hue_5, s:hue_5, '')
   call <sid>X('DiffText',    '', s:visual_grey, '')
