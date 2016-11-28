@@ -320,7 +320,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('NonText',      s:syntax_bg,     s:syntax_bg,      '')
   call <sid>X('PMenu',        '',              s:visual_grey,    '')
   " jordwalke: make the popup stand out just a bit.
-  call <sid>X('PMenuSel',     '',              s:syntax_cursor,  '')
+  call <sid>X('PMenuSel',     s:syntax_bg,              s:hue_2,  '')
   " jordwalke: Avoid floating scrollbar thumb.
   call <sid>X('PMenuSbar',    '',              s:visual_grey,      '')
   call <sid>X('PMenuThumb',   '',              s:mono_1,         '')
