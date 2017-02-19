@@ -341,7 +341,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('SpecialKey',   s:special_grey,  '',               '')
   call <sid>X('StatusLine',   s:syntax_fg,     s:syntax_cursor,  'none')
   " Remove the ugly grey nub.
-  call <sid>X('StatusLineNC', s:syntax_cursor, '',               '')
+  call <sid>X('StatusLineNC', s:syntax_cursor, s:mono_2,               '')
   call <sid>X('TabLine',      s:mono_1,        s:syntax_cursor,      'none')
   call <sid>X('TabLineFill',  s:mono_3,        s:syntax_cursor,  'none')
   call <sid>X('TabLineSel',   s:hue_2,     s:syntax_bg,          '')
