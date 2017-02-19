@@ -266,7 +266,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
     let s:syntax_bg     = '282c34'
     let s:syntax_gutter = '636d83'
-    let s:syntax_cursor = '2c323c'
+    let s:syntax_cursor = '2e343e'
 
     let s:syntax_accent = '528bff'
 
@@ -293,7 +293,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
     let s:syntax_bg     = 'fafafa'
     let s:syntax_gutter = '9e9e9e'
-    let s:syntax_cursor = 'f0f0f0'
+    let s:syntax_cursor = 'eeeeee'
 
     let s:syntax_accent = '526fff'
     let s:syntax_accent_2 = '0083be'
