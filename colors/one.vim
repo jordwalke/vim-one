@@ -7,9 +7,9 @@
 
 hi clear
 syntax reset
-"if exists('g:colors_name')
-  "unlet g:colors_name
-"endif
+if exists('g:colors_name')
+  unlet g:colors_name
+endif
 let g:colors_name = 'one'
 
 if !exists('g:one_allow_italics')
@@ -215,20 +215,32 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   endfun
 
   " sets the highlighting for the given group
-  fun <SID>X(group, fg, bg, attr)
+  fun <sid>X(group, fg, bg, attr)
     let l:attr = a:attr
     if g:one_allow_italics == 0 && l:attr ==? 'italic'
         let l:attr= 'none'
     endif
 
-    if a:fg !=? ''
-      exec 'hi ' . a:group . ' guifg=#' . a:fg . ' ctermfg=' . <SID>rgb(a:fg)
+    let l:bg = ""
+    let l:fg = ""
+    let l:decoration = ""
+
+    if a:bg != ''
+      let l:bg = " guibg=#" . a:bg . " ctermbg=" . <SID>rgb(a:bg)
     endif
-    if a:bg !=? ''
-      exec 'hi ' . a:group . ' guibg=#' . a:bg . ' ctermbg=' . <SID>rgb(a:bg)
+
+    if a:fg != ''
+      let l:fg = " guifg=#" . a:fg . " ctermfg=" . <SID>rgb(a:fg)
     endif
-    if a:attr !=? ''
-      exec 'hi ' . a:group . ' gui=' . l:attr . ' cterm=' . l:attr
+
+    if a:attr != ''
+      let l:decoration = " gui=" . l:attr . " cterm=" . l:attr
+    endif
+
+    let l:exec = l:fg . l:bg . l:decoration
+
+    if l:exec != ''
+      exec "hi " . a:group . l:exec
     endif
   endfun
 
