@@ -16,6 +16,8 @@ if !exists('g:one_allow_italics')
   let g:one_allow_italics = 0
 endif
 
+let g:hasGuiRunning = has('gui_running')
+
 if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " functions
   " returns an approximate grey index for the given grey level
@@ -215,32 +217,41 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   endfun
 
   " sets the highlighting for the given group
-  fun <sid>X(group, fg, bg, attr)
-    let l:attr = a:attr
-    if g:one_allow_italics == 0 && l:attr ==? 'italic'
-        let l:attr= 'none'
+  fun <sid>X(...)
+    let l:groupArg = a:1
+    let l:fgArg = a:2
+    let l:bgArg = a:3
+    let l:attrArg = a:4
+    if g:one_allow_italics == 0 && l:attrArg ==? 'italic'
+        let l:attrArg= 'none'
     endif
 
     let l:bg = ""
     let l:fg = ""
+    let l:guisp = ""
     let l:decoration = ""
 
-    if a:bg != ''
-      let l:bg = " guibg=#" . a:bg . " ctermbg=" . <SID>rgb(a:bg)
+    if l:bgArg != ''
+      let l:bg = " guibg=#" . l:bgArg . " ctermbg=" . <SID>rgb(l:bgArg)
     endif
 
-    if a:fg != ''
-      let l:fg = " guifg=#" . a:fg . " ctermfg=" . <SID>rgb(a:fg)
+    if l:fgArg != ''
+      let l:fg = " guifg=#" . l:fgArg . " ctermfg=" . <SID>rgb(l:fgArg)
     endif
 
-    if a:attr != ''
-      let l:decoration = " gui=" . l:attr . " cterm=" . l:attr
+    if l:attrArg != ''
+      let l:decoration = " gui=" . l:attrArg . " cterm=" . l:attrArg
     endif
 
-    let l:exec = l:fg . l:bg . l:decoration
+    if g:hasGuiRunning && a:0 >= 5 && a:5 != ''
+      let l:guispArg = a:5
+      let l:guisp = " guisp=#" . l:guispArg
+    endif
+
+    let l:exec = l:fg . l:bg . l:decoration . l:guisp
 
     if l:exec != ''
-      exec "hi " . a:group . l:exec
+      exec "hi " . l:groupArg . l:exec
     endif
   endfun
 
@@ -641,9 +652,9 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Spelling highlighting ---------------------------------------------------{{{
-  call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl')
+  call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl', s:hue_5)
   call <sid>X('SpellLocal',   '', s:syntax_bg, 'undercurl')
-  call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl')
+  call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl', s:hue_6)
   call <sid>X('SpellRare',    '', s:syntax_bg, 'undercurl')
   " }}}
 
