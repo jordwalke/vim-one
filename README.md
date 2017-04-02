@@ -127,3 +127,14 @@ I've tested the following setup on a Mac:
 [screenshot_replace_light]: screenshots/replace-light.png
 
 [issue_3]: https://github.com/rakr/vim-one/issues/3
+
+
+## Origins:
+
+This project is a fork of another vim-one plugin.
+
+It includes an additional fork of a colorscheme for lightline
+originally gotten here: 
+https://github.com/itchyny/lightline.vim/blob/master/autoload/lightline/colorscheme/one.vim
+
+
