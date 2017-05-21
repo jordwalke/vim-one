@@ -216,6 +216,25 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     return <SID>color(l:r, l:g, l:b)
   endfun
 
+  fun <SID>blend(from, to, pct)
+
+    let l:from = strpart(a:from, 0, 1) == '#' ? strpart(a:from, 1, 6) : a:from
+    let l:to = strpart(a:to, 0, 1) == '#' ? strpart(a:to, 1, 6) : a:to
+    let l:from_r = ('0x' . strpart(l:from, 0, 2)) + 0
+    let l:from_g = ('0x' . strpart(l:from, 2, 2)) + 0
+    let l:from_b = ('0x' . strpart(l:from, 4, 2)) + 0
+    let l:to_r = ('0x' . strpart(l:to, 0, 2)) + 0
+    let l:to_g = ('0x' . strpart(l:to, 2, 2)) + 0
+    let l:to_b = ('0x' . strpart(l:to, 4, 2)) + 0
+    let l:r = l:from_r + ((l:to_r - l:from_r) * a:pct)/100
+    let l:g = l:from_g + ((l:to_g - l:from_g) * a:pct)/100
+    let l:b = l:from_b + ((l:to_b - l:from_b) * a:pct)/100
+    return printf('%02x%02x%02x', l:r, l:g, l:b) 
+  endfun
+  fun <SID>blendBang(from, to, pct)
+    return '#'.<SID>blend(a:from, a:to, a:pct)
+  endfun
+
   " sets the highlighting for the given group
   fun <sid>X(...)
     let l:groupArg = a:1
@@ -260,7 +279,6 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " Color definition --------------------------------------------------------{{{
   if &background ==# 'dark'
     let s:mono_1 = 'abb2bf'
-    let s:mono_2 = '828997'
     let s:mono_3 = '5c6370'
 
 
@@ -269,6 +287,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:hue_3  = 'c678dd' " purple
     let s:hue_4  = '98c379' " green
 
+
     let s:hue_5   = 'e06c75' " red 1
     let s:hue_5_2 = 'be5046' " red 2
 
@@ -276,8 +295,10 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:hue_6_2 = 'e5c07b' " orange 2
 
     let s:syntax_bg     = '282c34'
-    let s:syntax_gutter = '636d83'
-    let s:syntax_cursor = '2e343e'
+    let s:chrome_bg = '2e343e'
+    let s:gutter_bg = s:chrome_bg
+    let s:gutter_fg = '636d83'
+    let s:syntax_cursor = <SID>blend(s:syntax_bg, s:chrome_bg, 70)
 
     let s:syntax_accent = '528bff'
 
@@ -285,9 +306,16 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:special_grey = '3b4048'
     " jordwalke: A bit less contrast.
     let s:visual_grey  = '3b414f'
+    let s:mono_2 = <SID>blend(s:chrome_bg, '828997', 50)
+
+    " Diffs - red and green
+    let s:diff_add_fg = <SID>blend(s:syntax_bg, s:hue_4, 20)
+    let s:diff_add_bg = s:hue_4
+    let s:diff_delete_fg = s:hue_5
+    " Recommended to hide this anyways: set fillchars=vert:\ ,diff:\ 
+    let s:diff_delete_bg = <SID>blend(s:syntax_bg, s:diff_delete_fg, 20)
   else
     let s:mono_1 = '494b53'
-    let s:mono_2 = '696c77'
     let s:mono_3 = 'a0a1a7'
 
     let s:hue_1  = '0184bc' " cyan
@@ -303,8 +331,10 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:hue_6_2 = 'c18401' " orange 2
 
     let s:syntax_bg     = 'fafafa'
-    let s:syntax_gutter = '9e9e9e'
-    let s:syntax_cursor = 'eeeeee'
+    let s:chrome_bg = 'eeeeee'
+    let s:gutter_bg = s:chrome_bg
+    let s:gutter_fg = '9e9e9e'
+    let s:syntax_cursor = <SID>blend(s:syntax_bg, s:chrome_bg, 70)
 
     let s:syntax_accent = '526fff'
     let s:syntax_accent_2 = '0083be'
@@ -312,6 +342,12 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
     let s:vertsplit    = 'e7e9e1'
     let s:special_grey = 'd3d3d3'
     let s:visual_grey  = 'd0d0d0'
+    let s:mono_2 = <SID>blend(s:chrome_bg, '696c77', 50)
+
+    let s:diff_add_fg = <SID>blend(s:syntax_bg, s:hue_4, 20)
+    let s:diff_add_bg = s:hue_4
+    let s:diff_delete_fg = s:hue_5
+    let s:diff_delete_bg = <SID>blend(s:syntax_bg, s:diff_delete_fg, 20)
   endif
 
   let s:syntax_fg = s:mono_1
@@ -321,7 +357,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
 
   " Vim editor color --------------------------------------------------------{{{
   call <sid>X('bold',         '',              '',               'bold')
-  call <sid>X('ColorColumn',  '',              s:syntax_cursor,  '')
+  call <sid>X('ColorColumn',  '',              s:chrome_bg,  '')
   call <sid>X('Conceal',      '',              '',               '')
   call <sid>X('Cursor',       s:syntax_bg,     s:hue_2,          '')
   call <sid>X('CursorIM',     '',              '',               '')
@@ -329,12 +365,14 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('CursorLine',   '',              s:syntax_cursor,  '')
   call <sid>X('Directory',    s:hue_2,         '',               '')
   call <sid>X('ErrorMsg',     s:hue_5,         s:syntax_bg,      'none')
-  call <sid>X('VertSplit',    s:vertsplit,     '',               'none')
+  " Strongly suggested:
+  " set fillchars=vert:\ 
+  call <sid>X('VertSplit',    s:vertsplit,     s:gutter_bg,               'none')
   call <sid>X('Folded',       s:syntax_bg,     s:syntax_fold_bg, 'none')
-  call <sid>X('FoldColumn',   s:mono_3,        s:syntax_cursor,  '')
+  call <sid>X('FoldColumn',   s:mono_3,        s:chrome_bg,  '')
   call <sid>X('IncSearch',    s:syntax_bg,     s:hue_6_2,        'none')
-  call <sid>X('LineNr',       s:syntax_gutter, '',               '')
-  call <sid>X('CursorLineNr', s:syntax_fg,     '',               'none')
+  call <sid>X('LineNr',       s:gutter_fg,     s:gutter_bg,  '')
+  call <sid>X('CursorLineNr', s:syntax_fg,     s:gutter_bg,  'none')
   call <sid>X('MatchParen',   s:syntax_bg,     s:hue_5,          '')
   call <sid>X('Italic',       '',              '',               'italic')
   call <sid>X('ModeMsg',      s:syntax_fg,     '',               '')
@@ -350,11 +388,11 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   call <sid>X('Question',     s:hue_2,         '',               '')
   call <sid>X('Search',       s:syntax_bg,     s:hue_6_2,        '')
   call <sid>X('SpecialKey',   s:special_grey,  '',               '')
-  call <sid>X('StatusLine',   s:syntax_fg,     s:syntax_cursor,  'none')
-  " Remove the ugly grey nub.
-  call <sid>X('StatusLineNC', s:syntax_cursor, s:mono_2,               '')
-  call <sid>X('TabLine',      s:mono_1,        s:syntax_cursor,      'none')
-  call <sid>X('TabLineFill',  s:mono_3,        s:syntax_cursor,  'none')
+  call <sid>X('StatusLine',   s:syntax_fg,     s:chrome_bg,  'none')
+  " Remove the ugly grey nub (first param has to be chrome_bg - same as vertsplit)
+  call <sid>X('StatusLineNC', s:chrome_bg,     s:mono_2,               '')
+  call <sid>X('TabLine',      s:mono_1,        s:chrome_bg,      'none')
+  call <sid>X('TabLineFill',  s:mono_3,        s:chrome_bg,  'none')
   call <sid>X('TabLineSel',   s:hue_2,     s:syntax_bg,          '')
   call <sid>X('Title',        s:mono_1,         '',               'none')
   call <sid>X('Visual',       '',              s:visual_grey,    '')
@@ -406,11 +444,11 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256
   " }}}
 
   " Diff highlighting -------------------------------------------------------{{{
-  call <sid>X('DiffAdd',     s:syntax_bg, s:hue_4, '')
-  call <sid>X('DiffChange',  '', s:syntax_cursor, '')
-  call <sid>X('DiffDelete',  s:hue_5, s:hue_5, '')
+  call <sid>X('DiffAdd',     s:diff_add_fg, s:diff_add_bg, '')
+  call <sid>X('DiffChange',  '', s:chrome_bg, '')
+  call <sid>X('DiffDelete',  s:diff_delete_bg, s:diff_delete_fg, '')
   call <sid>X('DiffText',    '', s:visual_grey, '')
-  call <sid>X('DiffAdded',   s:hue_4, s:visual_grey, '')
+  call <sid>X('DiffAdded',   s:diff_add_bg, s:visual_grey, '')
   call <sid>X('DiffFile',    s:hue_5, s:visual_grey, '')
   call <sid>X('DiffNewFile', s:hue_4, s:visual_grey, '')
   call <sid>X('DiffLine',    s:hue_2, s:visual_grey, '')
@@ -702,6 +740,8 @@ delf <SID>rgb_level
 delf <SID>rgb_number
 delf <SID>grey_color
 delf <SID>grey_level
+delf <SID>blend
+delf <SID>blendBang
 delf <SID>grey_number
 "}}}
 
