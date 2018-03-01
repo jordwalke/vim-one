@@ -357,7 +357,7 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
 
   " Vim editor color --------------------------------------------------------{{{
   call <sid>X('bold',         '',              '',               'bold')
-  call <sid>X('ColorColumn',  '',              s:chrome_bg,  '')
+  call <sid>X('ColorColumn',  '',              s:syntax_cursor,  '')
   call <sid>X('Conceal',      '',              '',               '')
   call <sid>X('Cursor',       s:syntax_bg,     s:hue_2,          '')
   call <sid>X('CursorIM',     '',              '',               '')
@@ -690,10 +690,17 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
   " }}}
 
   " Spelling highlighting ---------------------------------------------------{{{
-  call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl', s:hue_5)
-  call <sid>X('SpellLocal',   '', s:syntax_bg, 'undercurl')
-  call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl', s:hue_6)
-  call <sid>X('SpellRare',    '', s:syntax_bg, 'undercurl')
+  if g:hasGuiRunning
+    call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl', s:hue_5)
+    call <sid>X('SpellLocal',   '', s:syntax_bg, 'undercurl')
+    call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl', s:hue_6)
+    call <sid>X('SpellRare',    '', s:syntax_bg, 'undercurl')
+  else
+    call <sid>X('SpellBad',     '', s:syntax_bg, 'underline')
+    call <sid>X('SpellLocal',   '', s:syntax_bg, 'underline')
+    call <sid>X('SpellCap',     '', s:syntax_bg, 'underline')
+    call <sid>X('SpellRare',    '', s:syntax_bg, 'underline')
+  endif
   " }}}
 
   " Vim highlighting --------------------------------------------------------{{{
