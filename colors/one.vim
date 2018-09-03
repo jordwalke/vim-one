@@ -262,8 +262,10 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
       let l:decoration = " gui=" . l:attrArg . " cterm=" . l:attrArg
     endif
 
-    let l:guispArg = a:5
-    let l:guisp = " guisp=#" . l:guispArg
+    if a:0 >= 5 && a:5 != ''
+      let l:guispArg = a:5
+      let l:guisp = " guisp=#" . l:guispArg
+    endif
 
     let l:exec = l:fg . l:bg . l:decoration . l:guisp
 
@@ -389,6 +391,8 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
   call <sid>X('StatusLine',   s:syntax_fg,     s:chrome_bg,  'none')
   " Remove the ugly grey nub (first param has to be chrome_bg - same as vertsplit)
   call <sid>X('StatusLineNC', s:chrome_bg,     s:mono_2,               '')
+  call <sid>X('StatusLineTerm',   s:syntax_fg,     s:chrome_bg,  'none')
+  call <sid>X('StatusLineTermNC', s:chrome_bg,     s:mono_2,               'reverse')
   call <sid>X('TabLine',      s:mono_1,        s:chrome_bg,      'none')
   call <sid>X('TabLineFill',  s:mono_3,        s:chrome_bg,  'none')
   call <sid>X('TabLineSel',   s:hue_2,     s:syntax_bg,          '')
