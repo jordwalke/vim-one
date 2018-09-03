@@ -262,10 +262,8 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
       let l:decoration = " gui=" . l:attrArg . " cterm=" . l:attrArg
     endif
 
-    if g:hasGuiRunning && a:0 >= 5 && a:5 != ''
-      let l:guispArg = a:5
-      let l:guisp = " guisp=#" . l:guispArg
-    endif
+    let l:guispArg = a:5
+    let l:guisp = " guisp=#" . l:guispArg
 
     let l:exec = l:fg . l:bg . l:decoration . l:guisp
 
@@ -690,17 +688,10 @@ if has('gui_running') || &t_Co == 88 || &t_Co == 256 || &t_Co == 16777216
   " }}}
 
   " Spelling highlighting ---------------------------------------------------{{{
-  if g:hasGuiRunning
-    call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl', s:hue_5)
-    call <sid>X('SpellLocal',   '', s:syntax_bg, 'undercurl')
-    call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl', s:hue_6)
-    call <sid>X('SpellRare',    '', s:syntax_bg, 'undercurl')
-  else
-    call <sid>X('SpellBad',     '', s:syntax_bg, 'underline')
-    call <sid>X('SpellLocal',   '', s:syntax_bg, 'underline')
-    call <sid>X('SpellCap',     '', s:syntax_bg, 'underline')
-    call <sid>X('SpellRare',    '', s:syntax_bg, 'underline')
-  endif
+  call <sid>X('SpellBad',     '', s:syntax_bg, 'undercurl', s:hue_5)
+  call <sid>X('SpellLocal',   '', s:syntax_bg, 'undercurl')
+  call <sid>X('SpellCap',     '', s:syntax_bg, 'undercurl', s:hue_6)
+  call <sid>X('SpellRare',    '', s:syntax_bg, 'undercurl')
   " }}}
 
   " Vim highlighting --------------------------------------------------------{{{
